@@ -1,0 +1,5 @@
+E:\Algo Project\[TEMPLATE] MagniSnap\MagniSnap\obj\Debug\MagniSnap.csproj.AssemblyReference.cache
+E:\Algo Project\[TEMPLATE] MagniSnap\MagniSnap\obj\Debug\MagniSnap.MainForm.resources
+E:\Algo Project\[TEMPLATE] MagniSnap\MagniSnap\obj\Debug\intelligent_scissors.Properties.Resources.resources
+E:\Algo Project\[TEMPLATE] MagniSnap\MagniSnap\obj\Debug\MagniSnap.csproj.GenerateResource.cache
+E:\Algo Project\[TEMPLATE] MagniSnap\MagniSnap\obj\Debug\MagniSnap.csproj.CoreCompileInputs.cache
