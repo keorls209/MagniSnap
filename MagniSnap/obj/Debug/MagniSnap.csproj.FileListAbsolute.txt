@@ -1,0 +1,19 @@
+E:\Algo Project\[TEMPLATE] MagniSnap\MagniSnap\obj\Debug\MagniSnap.csproj.AssemblyReference.cache
+E:\Algo Project\[TEMPLATE] MagniSnap\MagniSnap\obj\Debug\MagniSnap.MainForm.resources
+E:\Algo Project\[TEMPLATE] MagniSnap\MagniSnap\obj\Debug\intelligent_scissors.Properties.Resources.resources
+E:\Algo Project\[TEMPLATE] MagniSnap\MagniSnap\obj\Debug\MagniSnap.csproj.GenerateResource.cache
+E:\Algo Project\[TEMPLATE] MagniSnap\MagniSnap\obj\Debug\MagniSnap.csproj.CoreCompileInputs.cache
+C:\Users\kerols ayman\source\repos\keorls209\MagniSnap\bin\Debug\MagniSnap.exe.config
+C:\Users\kerols ayman\source\repos\keorls209\MagniSnap\bin\Debug\MagniSnap.exe
+C:\Users\kerols ayman\source\repos\keorls209\MagniSnap\bin\Debug\MagniSnap.pdb
+C:\Users\kerols ayman\source\repos\keorls209\MagniSnap\obj\Debug\MagniSnap.csproj.AssemblyReference.cache
+C:\Users\kerols ayman\source\repos\keorls209\MagniSnap\obj\Debug\MagniSnap.MainForm.resources
+C:\Users\kerols ayman\source\repos\keorls209\MagniSnap\obj\Debug\intelligent_scissors.Properties.Resources.resources
+C:\Users\kerols ayman\source\repos\keorls209\MagniSnap\obj\Debug\MagniSnap.csproj.GenerateResource.cache
+C:\Users\kerols ayman\source\repos\keorls209\MagniSnap\obj\Debug\MagniSnap.csproj.CoreCompileInputs.cache
+C:\Users\kerols ayman\source\repos\keorls209\MagniSnap\obj\Debug\MagniSnap.exe
+C:\Users\kerols ayman\source\repos\keorls209\MagniSnap\obj\Debug\MagniSnap.pdb
+C:\Users\kerols ayman\source\repos\keorls209\MagniSnap\bin\Debug\PriorityQueue.dll
+C:\Users\kerols ayman\source\repos\keorls209\MagniSnap\bin\Debug\PriorityQueue.pdb
+C:\Users\kerols ayman\source\repos\keorls209\MagniSnap\bin\Debug\PriorityQueue.xml
+C:\Users\kerols ayman\source\repos\keorls209\MagniSnap\obj\Debug\MagniSnap.csproj.Up2Date
