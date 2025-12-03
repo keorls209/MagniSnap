@@ -40,7 +40,7 @@ namespace MagniSnap
     {
         ///Task 1: construct graph
 
-
+        //:)
         public static Dictionary<Node, List<(Node, double)>> Construct_Graph(RGBPixel[,] ImageMatrix)
         {
           
