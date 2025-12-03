@@ -38,40 +38,42 @@ namespace MagniSnap
     /// </summary>
     public class ImageToolkit
     {
-        ///Task 1: construct graph
-
-        //:)
+        // Task 1 : Constructing graph
         public static Dictionary<Node, List<(Node, double)>> Construct_Graph(RGBPixel[,] ImageMatrix)
         {
-          
 
-            Dictionary<Node, List < (Node, double) >> pixels = new Dictionary<Node, List<(Node, double)>>();
-            int imageHeight = ImageMatrix.GetLength(0);
-            int imageWidth = ImageMatrix.GetLength(1);
+            Dictionary<Node, List<(Node, double)>> pixels = new Dictionary<Node, List<(Node, double)>>();
+
+            int imageHeight = ImageMatrix.GetLength(0); // i -> rows
+            int imageWidth = ImageMatrix.GetLength(1); //  j -> columns
+
+            double epsilon = 1e-9; //To avoid crash when dividing by zero
+
+            //Creating the nodes
             for (int i = 0; i < imageHeight; i++)
             {
-                for(int j = 0; j < imageWidth; j++)
+                for (int j = 0; j < imageWidth; j++)
                 {
-                    Node newNode = new Node(i, j);  
-                    Vector2D energy = CalculatePixelEnergies(j,i, ImageMatrix);
+                    Node newNode = new Node(i, j);
+                    Vector2D energy = CalculatePixelEnergies(j, i, ImageMatrix);
                     if (!pixels.ContainsKey(newNode))
                         pixels[newNode] = new List<(Node, double)>();
                     if (j < imageWidth - 1)
                     {
                         Node rightNode = new Node(i, j + 1);
-                        double weight = 1.0 / energy.X;
+                        double weight = 1.0 / (energy.X + epsilon);
                         pixels[newNode].Add((rightNode, weight));
                         if (!pixels.ContainsKey(rightNode))
                             pixels[rightNode] = new List<(Node, double)>();
 
-                        
+
                         pixels[rightNode].Add((newNode, weight));
                     }
 
-                    if(j < imageHeight -1)
+                    if (i < imageHeight - 1)  //!!
                     {
                         Node bottomNode = new Node(i + 1, j);
-                        double bottomweight = 1.0 / energy.Y;
+                        double bottomweight = 1.0 / (energy.Y + epsilon);
                         pixels[newNode].Add((bottomNode, bottomweight));
                         if (!pixels.ContainsKey(bottomNode))
                             pixels[bottomNode] = new List<(Node, double)>();
@@ -82,7 +84,7 @@ namespace MagniSnap
                     if (j > 0)
                     {
                         Node leftNode = new Node(i, j - 1);
-                        double leftweight = 1.0 / CalculatePixelEnergies(j - 1, i, ImageMatrix).X;
+                        double leftweight = 1.0 / (CalculatePixelEnergies(j - 1, i, ImageMatrix).X + epsilon);
                         pixels[newNode].Add((leftNode, leftweight));
 
                         if (!pixels.ContainsKey(leftNode))
@@ -95,7 +97,7 @@ namespace MagniSnap
                     if (i > 0)
                     {
                         Node topNode = new Node(i - 1, j);
-                        double topweight = 1.0 / CalculatePixelEnergies(j, i - 1, ImageMatrix).Y;
+                        double topweight = 1.0 / (CalculatePixelEnergies(j, i - 1, ImageMatrix).Y + epsilon);
                         pixels[newNode].Add((topNode, topweight));
 
                         if (!pixels.ContainsKey(topNode))
@@ -135,8 +137,13 @@ namespace MagniSnap
                     continue;
                 visited.Add(temp);
                 neighbors = pixels[temp];  // get neighbors of current node 
-                // 1. edit distances
-                // 2. push to heap
+                                           // 1. edit distances
+                                           // 2. push to heap
+
+                // EARLY STOP CONDITION
+                if (temp.Equals(endNode))
+                    break;
+
                 foreach (var item in neighbors)
                 {
                     if (!visited.Contains(item.Item1) && item.Item2 + distances[temp] < distances[item.Item1])
@@ -150,6 +157,36 @@ namespace MagniSnap
             return parents;
         }
 
+
+
+        //Task 3 : Backtracking shortest path
+        public static List<Node> BacktrackShortestPath(Dictionary<Node, Node> parents, Node targetNode) //taking the Dictionary storing each node and its parent
+                                                                                                        //taking The destination node (end of the path)
+        {
+
+            List<Node> reversePath = new List<Node>(); //  store the path in reverse order first
+
+            // 1) Check if Dijkstra found a path
+            if (!parents.ContainsKey(targetNode))
+                return new List<Node>(); // No valid path
+
+            Node current = targetNode; // we will start backtracking from the target node
+
+
+            while (parents.ContainsKey(current)) // Continue moving backward as long as the current node has a parent
+            {
+
+                reversePath.Add(current); // Add the current node to the path
+                current = parents[current]; // Move to the parent node (one step backward in the path)
+            }
+
+
+            reversePath.Add(current); // Add the start node (it has no parent, so it is not included in the loop)
+
+            reversePath.Reverse(); // Add the start node (it has no parent, so it is not included in the loop)
+
+            return reversePath; // Return the reconstructed shortest path
+        }
         ///
         /// <summary>
         /// Open an image and load it into 2D array of colors (size: Height x Width)
