@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace intelligent_scissors
+namespace MagniSnap
 {
     public class Node
-    {
+    { //
 
         public int x, y;
         public Node(int X, int Y)

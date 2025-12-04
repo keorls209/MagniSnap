@@ -1,4 +1,4 @@
-﻿using intelligent_scissors;
+﻿using MagniSnap;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,6 +7,7 @@ using System.Drawing.Imaging;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using Priority_Queue;
+using System.IO;
 namespace MagniSnap
 {
     /// <summary>
@@ -47,7 +48,7 @@ namespace MagniSnap
             int imageHeight = ImageMatrix.GetLength(0); // i -> rows
             int imageWidth = ImageMatrix.GetLength(1); //  j -> columns
 
-            double epsilon = 1e-9; //To avoid crash when dividing by zero
+            //double epsilon = 1e-9; //To avoid crash when dividing by zero
 
             //Creating the nodes
             for (int i = 0; i < imageHeight; i++)
@@ -61,7 +62,7 @@ namespace MagniSnap
                     if (j < imageWidth - 1)
                     {
                         Node rightNode = new Node(i, j + 1);
-                        double weight = 1.0 / (energy.X + epsilon);
+                        double weight = 1.0 / (1 + energy.X );
                         pixels[newNode].Add((rightNode, weight));
                         if (!pixels.ContainsKey(rightNode))
                             pixels[rightNode] = new List<(Node, double)>();
@@ -73,7 +74,7 @@ namespace MagniSnap
                     if (i < imageHeight - 1)  //!!
                     {
                         Node bottomNode = new Node(i + 1, j);
-                        double bottomweight = 1.0 / (energy.Y + epsilon);
+                        double bottomweight = 1.0 / (1 + energy.Y );
                         pixels[newNode].Add((bottomNode, bottomweight));
                         if (!pixels.ContainsKey(bottomNode))
                             pixels[bottomNode] = new List<(Node, double)>();
@@ -84,7 +85,7 @@ namespace MagniSnap
                     if (j > 0)
                     {
                         Node leftNode = new Node(i, j - 1);
-                        double leftweight = 1.0 / (CalculatePixelEnergies(j - 1, i, ImageMatrix).X + epsilon);
+                        double leftweight = 1.0 / (1+(CalculatePixelEnergies(j - 1, i, ImageMatrix).X ));
                         pixels[newNode].Add((leftNode, leftweight));
 
                         if (!pixels.ContainsKey(leftNode))
@@ -93,11 +94,11 @@ namespace MagniSnap
                         pixels[leftNode].Add((newNode, leftweight));
 
                     }
-
+                    //
                     if (i > 0)
                     {
                         Node topNode = new Node(i - 1, j);
-                        double topweight = 1.0 / (CalculatePixelEnergies(j, i - 1, ImageMatrix).Y + epsilon);
+                        double topweight = 1.0 / (1+(CalculatePixelEnergies(j, i - 1, ImageMatrix).Y ));
                         pixels[newNode].Add((topNode, topweight));
 
                         if (!pixels.ContainsKey(topNode))
@@ -141,8 +142,8 @@ namespace MagniSnap
                                            // 2. push to heap
 
                 // EARLY STOP CONDITION
-                if (temp.Equals(endNode))
-                    break;
+                //if (temp.Equals(endNode))
+                    //break;
 
                 foreach (var item in neighbors)
                 {
@@ -166,9 +167,20 @@ namespace MagniSnap
 
             List<Node> reversePath = new List<Node>(); //  store the path in reverse order first
 
-            // 1) Check if Dijkstra found a path
+            //// 1) Check if Dijkstra found a path
+            //if (!parents.ContainsKey(targetNode))
+            //    return new List<Node>(); // No valid path
+
+            // ❗ SAFETY CHECKS (fixes your crash)
+            if (parents == null)
+                return reversePath;
+
+            if (targetNode == null)
+                return reversePath;
+
             if (!parents.ContainsKey(targetNode))
-                return new List<Node>(); // No valid path
+                return reversePath;
+
 
             Node current = targetNode; // we will start backtracking from the target node
 
@@ -187,6 +199,32 @@ namespace MagniSnap
 
             return reversePath; // Return the reconstructed shortest path
         }
+
+        //Task 4
+
+        public static void DrawPath(RGBPixel[,] image, List<Node> path)
+        {
+            if (path == null) return;
+
+            int height = image.GetLength(0);
+            int width = image.GetLength(1);
+
+            foreach (var node in path)
+            {
+                int row = node.x; // because you use new Node(i, j)
+                int col = node.y;
+
+                if (row >= 0 && row < height && col >= 0 && col < width)
+                {
+                    image[row, col].red = 255;
+                    image[row, col].green = 0;
+                    image[row, col].blue = 0;   // red path
+                }
+            }
+        }
+
+
+
         ///
         /// <summary>
         /// Open an image and load it into 2D array of colors (size: Height x Width)

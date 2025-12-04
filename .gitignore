@@ -1,5 +1,55 @@
-﻿################################################################################
-# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
-################################################################################
+﻿############################
+# Visual Studio Git Ignore
+############################
 
-/MagniSnap/MagniSnap.csproj
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+
+# Visual Studio cache files
+.vs/
+
+# Auto-generated files
+Generated\ Files/
+
+# NuGet
+*.nupkg
+**/packages/*
+!**/packages/build/
+*.snupkg
+
+# Others
+*.obj
+*.pdb
+*.cache
+*.dll
+*.exe
+*.log
+
+# Ignore test results
+TestResults/
+
+# OS Files
+Thumbs.db
+ehthumbs.db
+.DS_Store
+
+# Rider / JetBrains
+.idea/
+*.sln.iml

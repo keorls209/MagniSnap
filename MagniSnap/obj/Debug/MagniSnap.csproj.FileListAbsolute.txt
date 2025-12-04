@@ -17,3 +17,17 @@ C:\Users\kerols ayman\source\repos\keorls209\MagniSnap\bin\Debug\PriorityQueue.d
 C:\Users\kerols ayman\source\repos\keorls209\MagniSnap\bin\Debug\PriorityQueue.pdb
 C:\Users\kerols ayman\source\repos\keorls209\MagniSnap\bin\Debug\PriorityQueue.xml
 C:\Users\kerols ayman\source\repos\keorls209\MagniSnap\obj\Debug\MagniSnap.csproj.Up2Date
+C:\Users\hplap\Source\Repos\MagniSnap\MagniSnap\bin\Debug\MagniSnap.exe.config
+C:\Users\hplap\Source\Repos\MagniSnap\MagniSnap\bin\Debug\MagniSnap.exe
+C:\Users\hplap\Source\Repos\MagniSnap\MagniSnap\bin\Debug\MagniSnap.pdb
+C:\Users\hplap\Source\Repos\MagniSnap\MagniSnap\bin\Debug\PriorityQueue.dll
+C:\Users\hplap\Source\Repos\MagniSnap\MagniSnap\bin\Debug\PriorityQueue.pdb
+C:\Users\hplap\Source\Repos\MagniSnap\MagniSnap\bin\Debug\PriorityQueue.xml
+C:\Users\hplap\Source\Repos\MagniSnap\MagniSnap\obj\Debug\MagniSnap.csproj.AssemblyReference.cache
+C:\Users\hplap\Source\Repos\MagniSnap\MagniSnap\obj\Debug\MagniSnap.MainForm.resources
+C:\Users\hplap\Source\Repos\MagniSnap\MagniSnap\obj\Debug\intelligent_scissors.Properties.Resources.resources
+C:\Users\hplap\Source\Repos\MagniSnap\MagniSnap\obj\Debug\MagniSnap.csproj.GenerateResource.cache
+C:\Users\hplap\Source\Repos\MagniSnap\MagniSnap\obj\Debug\MagniSnap.csproj.CoreCompileInputs.cache
+C:\Users\hplap\Source\Repos\MagniSnap\MagniSnap\obj\Debug\MagniSnap.csproj.Up2Date
+C:\Users\hplap\Source\Repos\MagniSnap\MagniSnap\obj\Debug\MagniSnap.exe
+C:\Users\hplap\Source\Repos\MagniSnap\MagniSnap\obj\Debug\MagniSnap.pdb
