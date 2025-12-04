@@ -62,7 +62,8 @@ namespace MagniSnap
 
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
-                //Open the browsed image and display it
+
+
                 string OpenedFilePath = openFileDialog1.FileName;
                 ImageMatrix = ImageToolkit.OpenImage(OpenedFilePath);
                 ImageToolkit.ViewImage(ImageMatrix, mainPictureBox);

@@ -39,6 +39,8 @@ namespace MagniSnap
     /// </summary>
     public class ImageToolkit
     {
+
+
         // Task 1 : Constructing graph
         public static Dictionary<Node, List<(Node, double)>> Construct_Graph(RGBPixel[,] ImageMatrix)
         {
@@ -62,7 +64,7 @@ namespace MagniSnap
                     if (j < imageWidth - 1)
                     {
                         Node rightNode = new Node(i, j + 1);
-                        double weight = 1.0 / (1 + energy.X );
+                        double weight = 1.0 / ( energy.X);
                         pixels[newNode].Add((rightNode, weight));
                         if (!pixels.ContainsKey(rightNode))
                             pixels[rightNode] = new List<(Node, double)>();
@@ -74,7 +76,7 @@ namespace MagniSnap
                     if (i < imageHeight - 1)  //!!
                     {
                         Node bottomNode = new Node(i + 1, j);
-                        double bottomweight = 1.0 / (1 + energy.Y );
+                        double bottomweight = 1.0 / ( energy.Y);
                         pixels[newNode].Add((bottomNode, bottomweight));
                         if (!pixels.ContainsKey(bottomNode))
                             pixels[bottomNode] = new List<(Node, double)>();
@@ -85,7 +87,7 @@ namespace MagniSnap
                     if (j > 0)
                     {
                         Node leftNode = new Node(i, j - 1);
-                        double leftweight = 1.0 / (1+(CalculatePixelEnergies(j - 1, i, ImageMatrix).X ));
+                        double leftweight = 1.0 / (CalculatePixelEnergies(j - 1, i, ImageMatrix).X);
                         pixels[newNode].Add((leftNode, leftweight));
 
                         if (!pixels.ContainsKey(leftNode))
@@ -98,7 +100,7 @@ namespace MagniSnap
                     if (i > 0)
                     {
                         Node topNode = new Node(i - 1, j);
-                        double topweight = 1.0 / (1+(CalculatePixelEnergies(j, i - 1, ImageMatrix).Y ));
+                        double topweight = 1.0 / (CalculatePixelEnergies(j, i - 1, ImageMatrix).Y);
                         pixels[newNode].Add((topNode, topweight));
 
                         if (!pixels.ContainsKey(topNode))

@@ -3,6 +3,14 @@
   "WorkspaceRootPath": "C:\\Users\\hplap\\source\\repos\\MagniSnap\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{B478A375-640C-4194-84B4-01437585F941}|MagniSnap\\MagniSnap.csproj|c:\\users\\hplap\\source\\repos\\magnisnap\\magnisnap\\imagetoolkit.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B478A375-640C-4194-84B4-01437585F941}|MagniSnap\\MagniSnap.csproj|solutionrelative:magnisnap\\imagetoolkit.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B478A375-640C-4194-84B4-01437585F941}|MagniSnap\\MagniSnap.csproj|c:\\users\\hplap\\source\\repos\\magnisnap\\magnisnap\\mainform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B478A375-640C-4194-84B4-01437585F941}|MagniSnap\\MagniSnap.csproj|solutionrelative:magnisnap\\mainform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{B478A375-640C-4194-84B4-01437585F941}|MagniSnap\\MagniSnap.csproj|c:\\users\\hplap\\source\\repos\\magnisnap\\magnisnap\\node.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{B478A375-640C-4194-84B4-01437585F941}|MagniSnap\\MagniSnap.csproj|solutionrelative:magnisnap\\node.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
@@ -14,7 +22,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 8,
+          "SelectedChildIndex": 9,
           "Children": [
             {
               "$type": "Bookmark",
@@ -50,13 +58,39 @@
             },
             {
               "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "MainForm.cs",
+              "DocumentMoniker": "C:\\Users\\hplap\\source\\repos\\MagniSnap\\MagniSnap\\mainForm.cs",
+              "RelativeDocumentMoniker": "MagniSnap\\mainForm.cs",
+              "ToolTip": "C:\\Users\\hplap\\source\\repos\\MagniSnap\\MagniSnap\\mainForm.cs",
+              "RelativeToolTip": "MagniSnap\\mainForm.cs",
+              "ViewState": "AgIAADQAAAAAAAAAAAAmwEMAAABFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-04T00:28:30.253Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "ImageToolkit.cs",
+              "DocumentMoniker": "C:\\Users\\hplap\\source\\repos\\MagniSnap\\MagniSnap\\ImageToolkit.cs",
+              "RelativeDocumentMoniker": "MagniSnap\\ImageToolkit.cs",
+              "ToolTip": "C:\\Users\\hplap\\source\\repos\\MagniSnap\\MagniSnap\\ImageToolkit.cs*",
+              "RelativeToolTip": "MagniSnap\\ImageToolkit.cs*",
+              "ViewState": "AgIAAC0AAAAAAAAAAAAkwGYAAAA2AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-04T00:25:44.649Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
               "Title": "Node.cs",
               "DocumentMoniker": "C:\\Users\\hplap\\source\\repos\\MagniSnap\\MagniSnap\\Node.cs",
               "RelativeDocumentMoniker": "MagniSnap\\Node.cs",
               "ToolTip": "C:\\Users\\hplap\\source\\repos\\MagniSnap\\MagniSnap\\Node.cs",
               "RelativeToolTip": "MagniSnap\\Node.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-12-04T00:04:18.234Z",
               "EditorCaption": ""
