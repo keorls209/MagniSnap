@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using MagniSnap;
 
@@ -15,6 +16,7 @@ namespace MagniSnap
         bool isLassoEnabled = false;
 
         //Task 4:
+        private int radius = 50;
         Dictionary<Node, List<(Node, double)>> graph;
         Dictionary<Node, Node> parents;
         Node anchorNode;
@@ -45,41 +47,29 @@ namespace MagniSnap
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
-        {         
+        {
             Application.Exit();
         }
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            #region Do Change Remove Template Code
-            /// 4d17639adfad0a300acd78759e07a4f2
-            #endregion
-
             OpenFileDialog openFileDialog1 = new OpenFileDialog();
-            //
             openFileDialog1.Filter = "Image Files|*.jpg;*.jpeg;*.png;*.bmp;*.gif";
-            //
 
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
-
-
                 string OpenedFilePath = openFileDialog1.FileName;
                 ImageMatrix = ImageToolkit.OpenImage(OpenedFilePath);
                 ImageToolkit.ViewImage(ImageMatrix, mainPictureBox);
 
-                int width = ImageToolkit.GetWidth(ImageMatrix);
-                txtWidth.Text = width.ToString();
-                int height = ImageToolkit.GetHeight(ImageMatrix);
-                txtHeight.Text = height.ToString();
+                txtWidth.Text = ImageToolkit.GetWidth(ImageMatrix).ToString();
+                txtHeight.Text = ImageToolkit.GetHeight(ImageMatrix).ToString();
 
-                //Task 4
-                graph = ImageToolkit.Construct_Graph(ImageMatrix);
-                anchorSelected = false;
-                //
-
+                anchorSelected = false; // reset anchor
+                parents = null; // clear previous Dijkstra paths
             }
         }
+
 
         private void clearToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -93,7 +83,9 @@ namespace MagniSnap
             mainPictureBox.Cursor = Cursors.Cross;
 
             isLassoEnabled = true;
+            anchorSelected = false; // reset anchor so new click sets it
         }
+        
 
         private void btnLivewire_Leave(object sender, EventArgs e)
         {
@@ -103,68 +95,63 @@ namespace MagniSnap
             isLassoEnabled = false;
         }
 
+
+        // --- MouseClick handler ---
         private void mainPictureBox_MouseClick(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Left)
-            {
-                if (ImageMatrix != null && isLassoEnabled)
-                {
-                    int row = e.Y;
-                    int col = e.X;
+            if (e.Button != MouseButtons.Left || ImageMatrix == null || !isLassoEnabled) return;
 
-                    // Bounds check (in case PictureBox is larger than image)
-                    int height = ImageToolkit.GetHeight(ImageMatrix);
-                    int width = ImageToolkit.GetWidth(ImageMatrix);
+            int row = e.Y;
+            int col = e.X;
+            anchorNode = new Node(row, col);
+            anchorSelected = true;
 
-                    if (row < 0 || row >= height || col < 0 || col >= width)
-                        return;
-
-                    // Set anchor
-                    anchorNode = new Node(row, col);
-                    anchorSelected = true;
-
-                    // Run Dijkstra ONCE from anchor to all pixels
-                    parents = ImageToolkit.Dijkstra(graph, row, col, 0, 0); // end coords ignored
-                
-                // Refresh to redraw points
-                //Task 4 -> comment: mainPictureBox.Refresh();
-            }
-            }
+            int radius = 50; // can be adjusted
+            parents = ImageToolkit.DijkstraSubgraph(ImageMatrix, anchorNode, radius);
         }
 
+
+
+        // --- MouseMove handler ---
         private void mainPictureBox_MouseMove(object sender, MouseEventArgs e)
         {
-            txtMousePosX.Text = e.X.ToString();
-            txtMousePosY.Text = e.Y.ToString();
+            // 1️⃣ Safety checks
+            if (ImageMatrix == null || !isLassoEnabled || !anchorSelected)
+                return;
 
-            if (ImageMatrix != null && isLassoEnabled)
+            int row = e.Y;
+            int col = e.X;
+
+            // 2️⃣ Bounds check
+            int height = ImageToolkit.GetHeight(ImageMatrix);
+            int width = ImageToolkit.GetWidth(ImageMatrix);
+            if (row < 0 || row >= height || col < 0 || col >= width)
+                return;
+
+            Node targetNode = new Node(row, col);
+
+            // 3️⃣ Recompute subgraph if mouse leaves current radius (only for large images)
+            if (height * width > 512 * 512)
             {
-                int row = e.Y;
-                int col = e.X;
+                if (Math.Abs(row - anchorNode.x) > radius || Math.Abs(col - anchorNode.y) > radius)
+                {
+                    // reset anchor to current mouse position
+                    anchorNode = new Node(row, col);
+                    parents = ImageToolkit.DijkstraSubgraph(ImageMatrix, anchorNode, radius);
+                }
+            }
 
-                int height = ImageToolkit.GetHeight(ImageMatrix);
-                int width = ImageToolkit.GetWidth(ImageMatrix);
+            // 4️⃣ Backtrack shortest path from current mouse to anchor
+            var path = ImageToolkit.BacktrackShortestPath(parents, targetNode);
 
-                if (row < 0 || row >= height || col < 0 || col >= width)
-                    return;
+            // 5️⃣ Draw path on a temporary clone (so original image is preserved)
+            RGBPixel[,] temp = (RGBPixel[,])ImageMatrix.Clone();
+            ImageToolkit.DrawPath(temp, path);
 
-                Node targetNode = new Node(row, col);
-
-                // Backtrack shortest path from mouse to anchor
-                var path = ImageToolkit.BacktrackShortestPath(parents, targetNode);
-
-                // Clone original image so we don't modify it permanently
-                RGBPixel[,] temp = (RGBPixel[,])ImageMatrix.Clone();
-
-                // Draw path on temp image
-                ImageToolkit.DrawPath(temp, path);
-
-                // Display temp image with the livewire
-                ImageToolkit.ViewImage(temp, mainPictureBox);
-            
-            // Refresh to redraw points
-            //Task 4 -> comment:mainPictureBox.Refresh();
+            // 6️⃣ Display temp image with livewire
+            ImageToolkit.ViewImage(temp, mainPictureBox);
         }
-        }
+
+
     }
 }

@@ -37,170 +37,110 @@ namespace MagniSnap
     /// <summary>
     /// Library of static functions that deal with images
     /// </summary>
+    public struct Node
+    {
+        public int x, y;
+        public Node(int x, int y) { this.x = x; this.y = y; }
+    }
+
     public class ImageToolkit
     {
 
 
         // Task 1 : Constructing graph
-        public static Dictionary<Node, List<(Node, double)>> Construct_Graph(RGBPixel[,] ImageMatrix)
+        // Task 1 : Constructing graph (subgraph version for large images)
+        public static List<(Node, double)> GetNeighbors(Node n, RGBPixel[,] image)
         {
+            int height = image.GetLength(0);
+            int width = image.GetLength(1);
+            List<(Node, double)> neighbors = new List<(Node, double)>();
 
-            Dictionary<Node, List<(Node, double)>> pixels = new Dictionary<Node, List<(Node, double)>>();
-
-            int imageHeight = ImageMatrix.GetLength(0); // i -> rows
-            int imageWidth = ImageMatrix.GetLength(1); //  j -> columns
-
-            //double epsilon = 1e-9; //To avoid crash when dividing by zero
-
-            //Creating the nodes
-            for (int i = 0; i < imageHeight; i++)
+            if (n.y < width - 1)
             {
-                for (int j = 0; j < imageWidth; j++)
-                {
-                    Node newNode = new Node(i, j);
-                    Vector2D energy = CalculatePixelEnergies(j, i, ImageMatrix);
-                    if (!pixels.ContainsKey(newNode))
-                        pixels[newNode] = new List<(Node, double)>();
-                    if (j < imageWidth - 1)
-                    {
-                        Node rightNode = new Node(i, j + 1);
-                        double weight = 1.0 / ( energy.X);
-                        pixels[newNode].Add((rightNode, weight));
-                        if (!pixels.ContainsKey(rightNode))
-                            pixels[rightNode] = new List<(Node, double)>();
-
-
-                        pixels[rightNode].Add((newNode, weight));
-                    }
-
-                    if (i < imageHeight - 1)  //!!
-                    {
-                        Node bottomNode = new Node(i + 1, j);
-                        double bottomweight = 1.0 / ( energy.Y);
-                        pixels[newNode].Add((bottomNode, bottomweight));
-                        if (!pixels.ContainsKey(bottomNode))
-                            pixels[bottomNode] = new List<(Node, double)>();
-
-                        pixels[bottomNode].Add((newNode, bottomweight));
-                    }
-
-                    if (j > 0)
-                    {
-                        Node leftNode = new Node(i, j - 1);
-                        double leftweight = 1.0 / (CalculatePixelEnergies(j - 1, i, ImageMatrix).X);
-                        pixels[newNode].Add((leftNode, leftweight));
-
-                        if (!pixels.ContainsKey(leftNode))
-                            pixels[leftNode] = new List<(Node, double)>();
-
-                        pixels[leftNode].Add((newNode, leftweight));
-
-                    }
-                    //
-                    if (i > 0)
-                    {
-                        Node topNode = new Node(i - 1, j);
-                        double topweight = 1.0 / (CalculatePixelEnergies(j, i - 1, ImageMatrix).Y);
-                        pixels[newNode].Add((topNode, topweight));
-
-                        if (!pixels.ContainsKey(topNode))
-                            pixels[topNode] = new List<(Node, double)>();
-
-                        pixels[topNode].Add((newNode, topweight));
-                    }
-                }
+                Node r = new Node(n.x, n.y + 1);
+                neighbors.Add((r, 1.0 / CalculatePixelEnergies(r.y, r.x, image).X));
             }
-            return pixels;
+            if (n.y > 0)
+            {
+                Node l = new Node(n.x, n.y - 1);
+                neighbors.Add((l, 1.0 / CalculatePixelEnergies(l.y, l.x, image).X));
+            }
+            if (n.x < height - 1)
+            {
+                Node d = new Node(n.x + 1, n.y);
+                neighbors.Add((d, 1.0 / CalculatePixelEnergies(d.y, d.x, image).Y));
+            }
+            if (n.x > 0)
+            {
+                Node u = new Node(n.x - 1, n.y);
+                neighbors.Add((u, 1.0 / CalculatePixelEnergies(u.y, u.x, image).Y));
+            }
+
+            return neighbors;
         }
 
         //Task 2: find Shortest Path
 
-        public static Dictionary<Node, Node> Dijkstra(Dictionary<Node, List<(Node, double)>> pixels, int start_X, int start_Y, int end_X, int end_Y)
+        public static Dictionary<Node, Node> DijkstraSubgraph(RGBPixel[,] image, Node anchor, int radius)
         {
-            SimplePriorityQueue<Node, double> minNodes = new SimplePriorityQueue<Node, double>();
-
-            Node startNode = new Node(start_X, start_Y);
-            Node endNode = new Node(end_X, end_Y);
-
-            minNodes.Enqueue(startNode, 0); // push first node 
-            List<(Node, double)> neighbors;
-
-            var visited = new HashSet<Node>();
+            SimplePriorityQueue<Node, double> pq = new SimplePriorityQueue<Node, double>();
+            Dictionary<Node, Node> parents = new Dictionary<Node, Node>();
             Dictionary<Node, double> distances = new Dictionary<Node, double>();
-            Dictionary<Node, Node> parents = new Dictionary<Node, Node>(); // to send it to backtrack func
+            HashSet<Node> visited = new HashSet<Node>();
 
-            foreach (var node in pixels.Keys)
-                distances[node] = double.PositiveInfinity;
-            distances[startNode] = 0; // intialize start node distances
+            pq.Enqueue(anchor, 0);
+            distances[anchor] = 0;
 
-            while (minNodes.Count > 0)
+            while (pq.Count > 0)
             {
-                Node temp = minNodes.Dequeue();
-                if (visited.Contains(temp))
-                    continue;
-                visited.Add(temp);
-                neighbors = pixels[temp];  // get neighbors of current node 
-                                           // 1. edit distances
-                                           // 2. push to heap
+                Node current = pq.Dequeue();
+                if (visited.Contains(current)) continue;
+                visited.Add(current);
 
-                // EARLY STOP CONDITION
-                //if (temp.Equals(endNode))
-                    //break;
-
-                foreach (var item in neighbors)
+                foreach (var (neighbor, weight) in GetNeighbors(current, image))
                 {
-                    if (!visited.Contains(item.Item1) && item.Item2 + distances[temp] < distances[item.Item1])
+                    // Only process pixels inside radius
+                    if (Math.Abs(neighbor.x - anchor.x) > radius || Math.Abs(neighbor.y - anchor.y) > radius)
+                        continue;
+
+                    double newDist = distances[current] + weight;
+                    if (!distances.ContainsKey(neighbor) || newDist < distances[neighbor])
                     {
-                        distances[item.Item1] = item.Item2 + distances[temp];
-                        minNodes.Enqueue(item.Item1, distances[item.Item1]);
-                        parents[item.Item1] = temp;
+                        distances[neighbor] = newDist;
+                        parents[neighbor] = current;
+                        pq.Enqueue(neighbor, newDist);
                     }
                 }
             }
+
             return parents;
         }
+
 
         //smiley face
 
         //Task 3 : Backtracking shortest path
-        public static List<Node> BacktrackShortestPath(Dictionary<Node, Node> parents, Node targetNode) //taking the Dictionary storing each node and its parent
-                                                                                                        //taking The destination node (end of the path)
+        public static List<Node> BacktrackShortestPath(Dictionary<Node, Node> parents, Node targetNode)
         {
+            List<Node> reversePath = new List<Node>();
 
-            List<Node> reversePath = new List<Node>(); //  store the path in reverse order first
-
-            //// 1) Check if Dijkstra found a path
-            //if (!parents.ContainsKey(targetNode))
-            //    return new List<Node>(); // No valid path
-
-            // ❗ SAFETY CHECKS (fixes your crash)
             if (parents == null)
                 return reversePath;
-
-            if (targetNode == null)
-                return reversePath;
-
             if (!parents.ContainsKey(targetNode))
                 return reversePath;
 
-
-            Node current = targetNode; // we will start backtracking from the target node
-
-
-            while (parents.ContainsKey(current)) // Continue moving backward as long as the current node has a parent
+            Node current = targetNode;
+            while (parents.ContainsKey(current))
             {
-
-                reversePath.Add(current); // Add the current node to the path
-                current = parents[current]; // Move to the parent node (one step backward in the path)
+                reversePath.Add(current);
+                current = parents[current];
             }
+            reversePath.Add(current); // add start node
+            reversePath.Reverse();
 
-
-            reversePath.Add(current); // Add the start node (it has no parent, so it is not included in the loop)
-
-            reversePath.Reverse(); // Add the start node (it has no parent, so it is not included in the loop)
-
-            return reversePath; // Return the reconstructed shortest path
+            return reversePath;
         }
+
 
         //Task 4
 
